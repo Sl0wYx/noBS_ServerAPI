@@ -33,4 +33,4 @@ If the ID is not found:
 - Tailscale - encrypted tunnel between Azure and home server
 
 ## API url demo
-api.noboobs.world/accounts/934533956244742194
+https://api.noboobs.world/accounts/934533956244742194
