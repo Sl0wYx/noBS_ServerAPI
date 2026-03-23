@@ -55,6 +55,17 @@ Example response:
 If the ID is not found:
 ```{"Error":"Either account with that UUID does not exist or stat name is wrong"}```
 
+### Getting current server online
+```GET /online```
+
+Provides online players.
+
+Example request:
+```GET /online```
+
+Example response:
+```ILoveMyFroggy:	true```
+
 ## Tech Stack
 
 - Python (FastAPI) - API framework
@@ -67,3 +78,6 @@ https://api.noboobs.world/accounts/934533956244742194
 
 ### Statistics
 https://api.noboobs.world/stats/0c1f6b90-3499-3393-9ec2-412a4ba68884
+
+### Online
+https://api.noboobs.world/online
