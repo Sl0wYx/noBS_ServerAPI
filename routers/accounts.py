@@ -4,7 +4,7 @@ router = APIRouter()
 
 @router.get('/accounts/{discord_id}', tags=['accounts'])
 def get_account(discord_id: int):
-    with open("accounts.aof", mode='r', encoding='utf-8-sig') as accounts:
+    with open("data/accounts.aof", mode='r', encoding='utf-8-sig') as accounts:
         for line in accounts:
             word = line.split()
             if str(discord_id) == word[0]:
