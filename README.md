@@ -2,17 +2,18 @@
 REST API that links Discord accounts to Minecraft UUIDs.
 
 ## Backstory
-I own a Minecraft server with website and login page. Login is implemented using discord, since it was easy to do using DiscordSRV.
-It was all done using nginx - just sharing full on raw file with discord accounts beside the minecraft UUIDs. 
+I own a Minecraft server with website, login page and statistics page. Login is implemented using discord, since it was easy to do using DiscordSRV.
+It was all done using nginx - just sharing full on raw file with discord accounts beside the minecraft UUIDs, the same thing with statistics file. 
 This API changes this "ducktape" in my server infrastructure for a proper, I would say, welding.
 
 ## Architecture
-To avoid opening ports on my homelab server, everything is tunneled through Azure using Tailscale. Azure receives synced data from the Minecraft server over the Tailscale which then is consumed by Node.js frontend build by another developer.
+To avoid opening ports on my homelab server, everything is tunneled through Azure using Tailscale. Azure receives data from the Minecraft server over the Tailscale which then is consumed by Node.js frontend build by another developer.
 Example:
 Player -> Site -> API on Azure -> synced data from Minecraft server via Tailscale
 
-## API Endpoint
+## API Endpoints
 
+### Linking Discord account and Minecraft account
 ```GET /accounts/{discord_id}```
 
 Takes a Discord ID, checks if a matching account exists, and returns the linked Minecraft player UUID.
@@ -25,6 +26,34 @@ Example response:
 
 If the ID is not found:
 ```{"Error": "Account with that ID does not exist"}```
+
+### Getting statistics of a player
+```GET /stats/{uuid}```
+
+Takes a UUID, checks if a matching account exists, and returns all the stats of the player.
+
+Example request:
+```GET stats/0c1f6b90-3499-3393-9ec2-412a4ba68884```
+
+Example response:
+```{"uuid":"0c1f6b90-3499-3393-9ec2-412a4ba68884","Hoppers Inspected":"23"...}```
+
+If the ID is not found:
+```{"Error": "Account with that UUID does not exist"}```
+
+### Getting specific statistic of a player
+```GET /stats/{uuid}/{stat_name}```
+
+Takes a UUID and statistic name, checks if a matching account exists and if statistic name exists, and returns specific statistic value the stats of the player.
+
+Example request:
+```GET stats/0c1f6b90-3499-3393-9ec2-412a4ba68884/Hoppers Inspected```
+
+Example response:
+```{"uuid":"0c1f6b90-3499-3393-9ec2-412a4ba68884","Player Name":"Example","Hoppers Inspected":"23"}```
+
+If the ID is not found:
+```{"Error":"Either account with that UUID does not exist or stat name is wrong"}```
 
 ## Tech Stack
 
