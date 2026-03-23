@@ -11,7 +11,9 @@ def get_online_players():
         reader = json.load(online_file)
         player_names = list(reader['online'].keys())
         online = set()
-        for player_name in player_names:
-            player = get_all_player_stats_by_name(player_name)
-            online.add(player['uuid'])
+
+        if player_names is not None:
+            for player_name in player_names:
+                player = get_all_player_stats_by_name(player_name)
+                online.add(player['uuid'])
         return online
