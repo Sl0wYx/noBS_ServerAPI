@@ -10,7 +10,7 @@ def get_player_stat_by_name(uuid: str, stat_name: str):
         for row in reader:
             for col in row:
                 if row['uuid'] == uuid and col == stat_name:
-                    return {"uuid" : row['uuid'], "player_name" : row['Player Name'], "stat_value" : row[col]}
+                    return {"uuid" : row['uuid'], "stat_value" : row[col]}
 
         return {"Error": "Either account with that UUID does not exist or stat name is wrong"}
 

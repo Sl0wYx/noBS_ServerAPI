@@ -1,11 +1,10 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 
-app = FastAPI()
+router = APIRouter()
 
-
-@app.get("/accounts/{discord_id}")
+@router.get('/accounts/{discord_id}', tags=['accounts'])
 def get_account(discord_id: int):
-     with open("accounts.aof", mode='r', encoding='utf-8-sig') as accounts:
+    with open("accounts.aof", mode='r', encoding='utf-8-sig') as accounts:
         for line in accounts:
             word = line.split()
             if str(discord_id) == word[0]:
@@ -13,7 +12,3 @@ def get_account(discord_id: int):
                         "PlayerUUID": str(word[1])}
 
         return {"Error": "Account with that ID does not exist"}
-
-
-
-
