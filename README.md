@@ -64,7 +64,7 @@ Example request:
 ```GET /online```
 
 Example response:
-```ILoveMyFroggy:	true```
+```["7a20cf2d-9161-3db5-9d3c-31b2a661a0e5","9ec01599-d8a8-3853-b93e-43ad6e1258cc"]```
 
 ## Tech Stack
 
