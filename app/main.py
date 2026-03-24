@@ -1,7 +1,7 @@
 from fastapi import Depends, FastAPI
-from routers import accounts
-from routers import stats
-from routers import online
+from app.routers import accounts
+from app.routers import stats
+from app.routers import online
 app = FastAPI()
 
 app.include_router(accounts.router)

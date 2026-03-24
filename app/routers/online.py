@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 import json
-from routers.stats import get_all_player_stats_by_name
+from app.routers.stats import get_all_player_stats_by_name
 
 router = APIRouter()
 
