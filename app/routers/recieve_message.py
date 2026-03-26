@@ -15,12 +15,19 @@ router = APIRouter()
 async def get_image(date : str):
     date_str = str(date.replace(" ", "_").replace(":", "-"))
     local_url = Path(f"/home/noboobs/noBS_BotIntegrator/src/{date_str}.png")
+
+    if not local_url.exists():
+        raise HTTPException(status_code=404, detail="Image not found")
+
     return FileResponse(local_url)
 
 @router.get("/get_message", tags=["telegram"])
 async def get_message():
-    with open("app/data/message.json", mode='r', encoding='utf-8-sig') as message:
+    try:
+        with open("app/data/message.json", mode='r', encoding='utf-8-sig') as message:
             return json.load(message)
+    except (FileNotFoundError, IOError):
+        raise HTTPException(status_code=500, detail="File message is unreachable")
 
 @router.post('/receive_message', tags=["telegram"])
 async def receive_message(data: dict, request: Request):
@@ -30,10 +37,16 @@ async def receive_message(data: dict, request: Request):
         base = Path("app/data")
         path = base / "message.json"
 
+        if not base.exists():
+            raise HTTPException(status_code=404, detail=f"Path {base} not found")
+
         date_str = str(data.get("date")).replace(" ", "_").replace(":", "-")
         if data.get("image"):
             image_dict = {"image" : f"{IMAGE_URL}/{date_str}"}
             data.update(image_dict)
-        
-        path.write_text(json.dumps(data))
+
+        try:
+            path.write_text(json.dumps(data))
+        except IOError:
+            raise HTTPException(status_code=500, detail="Failed to write message")
         

@@ -1,33 +1,44 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 import csv
 
 router = APIRouter()
 
 @router.get('/stats/{uuid}/{stat_name}', tags=['stats'])
 def get_player_stat_by_name(uuid: str, stat_name: str):
-    with open('app/data/stats.csv', 'r', newline='') as stats_file:
-        reader = csv.DictReader(stats_file)
-        for row in reader:
-            for col in row:
-                if row['uuid'] == uuid and col == stat_name:
-                    return {"uuid" : row['uuid'], "stat_value" : row[col]}
+    try:
+        with open('app/data/stats.csv', 'r', newline='') as stats_file:
+            reader = csv.DictReader(stats_file)
+            for row in reader:
+                for col in row:
+                    if row['uuid'] == uuid and col == stat_name:
+                        return {"uuid" : row['uuid'], "stat_value" : row[col]}
 
-        return {"Error": "Either account with that UUID does not exist or stat name is wrong"}
+            raise HTTPException(status_code=404, detail=f"Stats not found")
+    except (FileNotFoundError, IOError):
+        raise HTTPException(status_code=500, detail=f"Wasn't able to read stats file")
 
 @router.get('/stats/{uuid}', tags=['stats'])
 def get_all_player_stats(uuid: str):
-    with open('app/data/stats.csv', 'r', newline='') as stats_file:
-        reader = csv.DictReader(stats_file)
-        for row in reader:
-            if row['uuid'] == uuid:
-                return row
+    try:
+        with open('app/data/stats.csv', 'r', newline='') as stats_file:
+            reader = csv.DictReader(stats_file)
+            for row in reader:
+                if row['uuid'] == uuid:
+                    return row
 
-        return {"Error": "Account with that UUID does not exist"}
+            raise HTTPException(status_code=404, detail=f"Account with that uuid not found")
+    except (FileNotFoundError, IOError):
+        raise HTTPException(status_code=500, detail="Wasn't able to read stats file")
 
 @router.get('/stats_name/{player_name}', tags=['stats'])
 def get_all_player_stats_by_name(player_name: str):
-    with open('app/data/stats.csv', 'r', newline='') as stats_file:
-        reader = csv.DictReader(stats_file)
-        for row in reader:
-            if row['Player Name'] == player_name:
-                return row
+    try:
+        with open('app/data/stats.csv', 'r', newline='') as stats_file:
+            reader = csv.DictReader(stats_file)
+            for row in reader:
+                if row['Player Name'] == player_name:
+                    return row
+            raise HTTPException(status_code=404, detail=f"Stats with that player name not found")
+
+    except (FileNotFoundError, IOError):
+        raise HTTPException(status_code=500, detail="Wasn't able to read stats file")
