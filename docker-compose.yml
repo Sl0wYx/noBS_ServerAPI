@@ -1,9 +1,10 @@
 services:
   myapi:
-    build: .
+    build:
+      context: .
+      network: host
     ports:
       - "8000:8000"
-    network_mode: host
     env_file:
       - app/data/private/.env
     volumes:
