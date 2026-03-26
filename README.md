@@ -66,6 +66,13 @@ Example request:
 Example response:
 ```["7a20cf2d-9161-3db5-9d3c-31b2a661a0e5","9ec01599-d8a8-3853-b93e-43ad6e1258cc"]```
 
+### Getting latest channel message
+```GET /get_message```
+
+Returns the latest Telegram channel message converted to markdown.
+Example response:
+```{"Message": "**Announcement title**\nAnnouncement body", "Date": "2026-03-26 00:37:46"}```
+
 ## Tech Stack
 
 - Python (FastAPI) - API framework
@@ -81,3 +88,7 @@ https://api.noboobs.world/stats/0c1f6b90-3499-3393-9ec2-412a4ba68884
 
 ### Online
 https://api.noboobs.world/online
+
+## Related repos
+- [Telegram Bot](https://github.com/Sl0wYx/noBS_BotIntegrator)
+- [Infrastructure](https://github.com/Sl0wYx/noBS_Infrastructure)
