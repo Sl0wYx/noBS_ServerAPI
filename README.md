@@ -25,7 +25,15 @@ Example response:
 ```{"DiscordID": 934533956244742194, "PlayerUUID": "32337244-5a74-3143-aa78-ce6736d8f490"}```
 
 If the ID is not found:
-```{"Error": "Account with that ID does not exist"}```
+```404 Account with that ID does not exist```
+
+### Getting all statistics
+```GET /stats/all```
+
+Reads file stats.json
+
+Example response:
+```{"Distance Fallen":{"demoralize":"50267","Anfox":"7371065",...}}```
 
 ### Getting statistics of a player
 ```GET /stats/{uuid}```
@@ -39,7 +47,7 @@ Example response:
 ```{"uuid":"0c1f6b90-3499-3393-9ec2-412a4ba68884","Hoppers Inspected":"23"...}```
 
 If the ID is not found:
-```{"Error": "Account with that UUID does not exist"}```
+```404 Account with that uuid not found```
 
 ### Getting specific statistic of a player
 ```GET /stats/{uuid}/{stat_name}```
@@ -53,7 +61,7 @@ Example response:
 ```{"uuid":"0c1f6b90-3499-3393-9ec2-412a4ba68884","Player Name":"Example","Hoppers Inspected":"23"}```
 
 If the ID is not found:
-```{"Error":"Either account with that UUID does not exist or stat name is wrong"}```
+```404 Stats not found```
 
 ### Getting current server online
 ```GET /online```
@@ -71,13 +79,22 @@ Example response:
 
 Returns the latest Telegram channel message converted to markdown.
 Example response:
-```{"Message": "**Announcement title**\nAnnouncement body", "Date": "2026-03-26 00:37:46"}```
+```{"Message": "**Announcement title**\nAnnouncement body", "Date": "2026-03-26 00:37:46", "Image": "<image url>"}```
+
+### Getting image
+```GET /get_image/{date}```
+
+Returns image made on given date.
+
+Example response:
+```{image}```
 
 ## Tech Stack
 
 - Python (FastAPI) - API framework
 - Azure VM - hosting
 - Tailscale - encrypted tunnel between Azure and home server
+- Docker
 
 ## API url demo
 ### Accounts link
