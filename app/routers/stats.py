@@ -1,7 +1,17 @@
 from fastapi import APIRouter, HTTPException
 import csv
+import json
 
 router = APIRouter()
+
+@router.get('/stats/all', tags=['stats'])
+def get_raw_stats():
+    try:
+        with open('app/data/stats.json', 'r', newline='') as stats_file:
+            reader = json.load(stats_file)
+            return reader['scoreboard']['scores']
+    except (FileNotFoundError, IOError):
+        raise HTTPException(status_code=500, detail=f"Wasn't able to read stats.json")
 
 @router.get('/stats/{uuid}/{stat_name}', tags=['stats'])
 def get_player_stat_by_name(uuid: str, stat_name: str):
@@ -30,7 +40,7 @@ def get_all_player_stats(uuid: str):
     except (FileNotFoundError, IOError):
         raise HTTPException(status_code=500, detail="Wasn't able to read stats file")
 
-@router.get('/stats_name/{player_name}', tags=['stats'])
+@router.get('/stats/name/{player_name}', tags=['stats'])
 def get_all_player_stats_by_name(player_name: str):
     try:
         with open('app/data/stats.csv', 'r', newline='') as stats_file:
