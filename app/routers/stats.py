@@ -40,7 +40,7 @@ def get_all_player_stats(uuid: str):
     except (FileNotFoundError, IOError):
         raise HTTPException(status_code=500, detail="Wasn't able to read stats file")
 
-@router.get('/stats/name/{player_name}', tags=['stats'])
+@router.get('/stats_name/{player_name}', tags=['stats'])
 def get_all_player_stats_by_name(player_name: str):
     try:
         with open('app/data/stats.csv', 'r', newline='') as stats_file:
