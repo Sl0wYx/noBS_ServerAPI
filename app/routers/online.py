@@ -15,9 +15,14 @@ def get_online_players():
             online = set()
 
             for player_name in player_names:
-                player = get_all_player_stats_by_name(player_name)
-                if player and ('uuid' in player):
-                    online.add(player['uuid'])
+                try:
+                    player = get_all_player_stats_by_name(player_name)
+                    if player and ('uuid' in player):
+                        online.add(player['uuid'])
+                except Exception as e:
+                    continue
+
+
             return online
 
     except(FileNotFoundError, IOError):

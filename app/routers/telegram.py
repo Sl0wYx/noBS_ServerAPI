@@ -12,7 +12,7 @@ API_TOKEN = os.getenv("API_TOKEN")
 router = APIRouter()
 
 @router.get("/get_image/{date}", tags=["telegram"])
-async def get_image(date : str):
+def get_image(date : str):
     date_str = str(date.replace(" ", "_").replace(":", "-"))
     local_url = Path(f"app/data/images/{date_str}.png")
 
@@ -22,7 +22,7 @@ async def get_image(date : str):
     return FileResponse(local_url)
 
 @router.get("/get_message", tags=["telegram"])
-async def get_message():
+def get_message():
     try:
         with open("app/data/message.json", mode='r', encoding='utf-8-sig') as message:
             return json.load(message)
@@ -30,7 +30,7 @@ async def get_message():
         raise HTTPException(status_code=500, detail="File message is unreachable")
 
 @router.post('/receive_message', tags=["telegram"])
-async def receive_message(data: dict, request: Request):
+def receive_message(data: dict, request: Request):
     if request.headers.get("authorization") != API_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid API Token")
     else:
