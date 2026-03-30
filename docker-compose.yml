@@ -3,6 +3,7 @@ services:
     build:
       context: .
       network: host
+      image: ghcr.io/sl0wyx/nobs_serverapi:latest
     ports:
       - "8000:8000"
     environment:
