@@ -24,7 +24,7 @@ jobs:
         chmod 600 ./azure_key.pem
     - name: Pull and deploy docker on Azure
       run : |
-          ssh -tt -i ./azure_key.pem $AZURE_SSH_USER@$AZURE_SSH_IP << 'EOF'
+          ssh -tt -o StrictHostKeyChecking=no -i ./azure_key.pem $AZURE_SSH_USER@$AZURE_SSH_IP << 'EOF'
             cd ./noboobs/noBS_AccountAPI
             
             git fetch --all
