@@ -10,3 +10,5 @@ services:
       - ./app/data:/home/noboobs/n/app/data
       - /home/noboobs/noBS_BotIntegrator/src:/home/noboobs/n/app/data/images
 
+    restart: unless-stopped
+
