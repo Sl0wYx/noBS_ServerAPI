@@ -1,5 +1,3 @@
-from idlelib import __main__
-
 from fastapi import APIRouter, Request, HTTPException
 from app.core import common
 import json
