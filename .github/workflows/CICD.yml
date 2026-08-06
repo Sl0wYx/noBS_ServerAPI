@@ -45,7 +45,7 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }} 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Build the Docker image
       run : |
           docker build -t ghcr.io/sl0wyx/nobs_serverapi:latest .
