@@ -16,7 +16,7 @@ def test_specific_stat():
 def test_not_existing_stat():
     response = client.get("/stats/32337244-5a74-3143-aa78-ce6736d8f490/not a player")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Stats not found"}
+    assert response.json() == {"detail": "Account with that uuid not found or stat doesnt exist."}
 
 def test_stats_existing_uuid():
     response = client.get("/stats/32337244-5a74-3143-aa78-ce6736d8f490")

@@ -30,6 +30,6 @@ def get_account(discord_id: int):
         accounts = load_accounts()
 
     if discord_id in accounts:
-        return accounts[discord_id]
+        return {"PlayerUUID": accounts[discord_id], "DiscordID": discord_id}
     else:
         raise HTTPException(status_code=404, detail="Account with that ID does not exist")
