@@ -68,7 +68,7 @@ jobs:
     - name: Pull and deploy docker on Azure
       run : |
           ssh -tt -o StrictHostKeyChecking=no -i ./azure_key.pem $AZURE_SSH_USER@$AZURE_SSH_IP << 'EOF'
-            cd ./noboobs/noBS_AccountsAPI
+            cd ../noboobs/noBS_AccountsAPI
             
             git fetch --all
             git reset --hard origin/main
