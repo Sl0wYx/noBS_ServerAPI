@@ -38,7 +38,7 @@ def receive_message(data: dict, request: Request):
     if request.headers.get("authorization") != API_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid API Token")
     else:
-        base = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/"))
+        base = Path(os.path.join(os.path.dirname(__file__), "../data/"))
         path = base / "message.json"
 
         if not base.exists():
