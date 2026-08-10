@@ -1,56 +1,33 @@
 from fastapi import APIRouter, HTTPException
 from app.core import common
-import csv
-import json
 import os
 
 PATH_JSON = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/stats.json"))
 PATH_CSV = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/stats.csv"))
 router = APIRouter()
 
-# -------- Helpers --------
-def load_stats_json():
-    try:
-        with open(PATH_JSON, 'r', newline='') as stats_file:
-            reader = json.load(stats_file)
-            return reader
-    except (FileNotFoundError, IOError):
-        raise HTTPException(status_code=500, detail=f"Wasn't able to read stats.json")
-
-def load_stats_csv():
-    res = []
-    try:
-        with open(PATH_CSV, 'r', newline='') as stats_file:
-            reader = csv.DictReader(stats_file)
-            for row in reader:
-                res.append(row)
-
-            return res
-    except (FileNotFoundError, IOError):
-        raise HTTPException(status_code=500, detail=f"Wasn't able to read stats.csv file")
-
 # JSON change tracking
 last_change_json = common.file_last_change(PATH_JSON)
-stats_json = load_stats_json()
+stats_json = common.load_file(PATH_JSON, "json")
 
 def check_update_json():
     global stats_json, last_change_json
     current_change = common.file_last_change(PATH_JSON)
     if last_change_json != current_change:
-        stats_json = load_stats_json()
+        stats_json = common.load_file(PATH_JSON, "json")
         last_change_json = current_change
 
     return stats_json
 
 # CSV change tracking
 last_change_csv = common.file_last_change(PATH_CSV)
-stats_csv = load_stats_csv()
+stats_csv = common.load_file(PATH_CSV, "csv")
 
 def check_update_csv():
     global stats_csv, last_change_csv
     current_change = common.file_last_change(PATH_CSV)
     if last_change_csv != current_change:
-        stats_csv = load_stats_csv()
+        stats_csv = common.load_file(PATH_CSV, "csv")
         last_change_csv = current_change
 
     return stats_csv
@@ -83,9 +60,6 @@ def get_all_player_stats(uuid: str):
 @router.get('/stats_name/{player_name}', tags=['stats'])
 def get_all_player_stats_by_name(player_name: str):
     stats = check_update_csv()
+    return common.get_all_player_stats_by_name(stats, player_name)
 
-    for row in stats:
-        if row['Player Name'] == player_name:
-            return row
-    raise HTTPException(status_code=404, detail=f"Stats with that player name not found")
 
