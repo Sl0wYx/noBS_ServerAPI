@@ -15,7 +15,7 @@ def file_last_change(path):
 def load_file(path, op):
     file = path.split("/")[-1]
 
-    if file == "csv":
+    if op == "csv":
         res = []
         try:
             with open(path, 'r', newline='') as stats_file:
@@ -26,14 +26,14 @@ def load_file(path, op):
                 return res
         except (FileNotFoundError, IOError):
             raise HTTPException(status_code=500, detail=f"File {file} is unreachable")
-    elif file == "json":
+    elif op == "json":
         try:
             with open(path, 'r', newline='') as stats_file:
                 reader = json.load(stats_file)
                 return reader
         except (FileNotFoundError, IOError):
             raise HTTPException(status_code=500, detail=f"File {file} is unreachable")
-    elif file == "aof":
+    elif op == "aof":
         f_json = {}
         try:
             with open(path, mode='r', encoding='utf-8-sig') as f:
