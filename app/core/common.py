@@ -1,5 +1,4 @@
 import os
-from idlelib import __main__
 import json
 import csv
 
