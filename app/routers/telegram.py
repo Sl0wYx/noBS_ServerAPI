@@ -13,7 +13,7 @@ load_dotenv(ENV_PATH)
 
 API_TOKEN = os.getenv("API_TOKEN")
 API_URL = os.getenv("API_URL")
-IMAGE_URL = f"{API_URL}/get_image"
+IMAGE_URL = "https://api.noboobs.world/get_image"
 router = APIRouter()
 
 @router.get("/get_image/{date}", tags=["telegram"])
