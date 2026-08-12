@@ -38,3 +38,13 @@ def test_statsbyname_not_found():
     response = client.get("/stats_name/Evergeti")
     assert response.status_code == 404
     assert response.json() == {"detail": "Stats with that player name not found"}
+
+def test_deaths_by_hour():
+    response = client.get("/stats/deaths_by_hour")
+    assert response.status_code == 200
+    assert isinstance(response.json(), dict)
+
+def test_total_hours():
+    response = client.get("/stats/total_hours")
+    assert response.status_code == 200
+    assert isinstance(response.json(), dict)

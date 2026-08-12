@@ -62,4 +62,29 @@ def get_all_player_stats_by_name(player_name: str):
     stats = check_update_csv()
     return common.get_all_player_stats_by_name(stats, player_name)
 
+@router.get('/stats/deaths_per_hour', tags=['stats'])
+def get_death_rate():
+    scores = check_update_json()['scoreboard']['scores']
 
+    deaths_rate_stats = {'Death Rate': {}}
+
+    for player in scores['Deaths'].keys():
+        hours_played = int(scores['Hours Played'][player])
+        deaths = int(scores['Deaths'][player])
+        if hours_played < 24 and deaths < 1:
+            continue
+
+        deaths_per_hour = round(deaths / hours_played, 2)
+        deaths_rate_stats['Death Rate'][player] = deaths_per_hour
+
+    return deaths_rate_stats
+
+@router.get('/stats/total_hours', tags=['stats'])
+def get_total_hours():
+    hours_played = check_update_json()['scoreboard']['scores']['Hours Played']
+
+    total_hours = 0
+    for score in hours_played.values():
+        total_hours += int(score)
+
+    return {"Total Hours": total_hours}
