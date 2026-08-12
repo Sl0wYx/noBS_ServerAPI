@@ -62,7 +62,7 @@ def get_all_player_stats_by_name(player_name: str):
     stats = check_update_csv()
     return common.get_all_player_stats_by_name(stats, player_name)
 
-@router.get('/stats/deaths_per_hour', tags=['stats'])
+@router.get('/stats/death_rate', tags=['stats'])
 def get_death_rate():
     scores = check_update_json()['scoreboard']['scores']
 
@@ -88,3 +88,4 @@ def get_total_hours():
         total_hours += int(score)
 
     return {"Total Hours": total_hours}
+
