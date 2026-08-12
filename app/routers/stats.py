@@ -71,7 +71,7 @@ def get_death_rate():
     for player in scores['Deaths'].keys():
         hours_played = int(scores['Hours Played'][player])
         deaths = int(scores['Deaths'][player])
-        if hours_played < 24 and deaths < 1:
+        if (hours_played < 24 and deaths < 1) or hours_played == 0:
             continue
 
         deaths_per_hour = round(deaths / hours_played, 2)
