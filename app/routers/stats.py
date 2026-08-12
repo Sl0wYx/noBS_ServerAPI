@@ -39,7 +39,7 @@ def get_all_stats():
     return stats['scoreboard']['scores']
 
 
-@router.get('/stats/{uuid}/{stat_name}', tags=['stats'])
+@router.get('/stats/player/uuid/{uuid}/{stat_name}', tags=['stats'])
 def get_player_stat_by_name(uuid: str, stat_name: str):
     stats = check_update_csv()
 
@@ -48,7 +48,7 @@ def get_player_stat_by_name(uuid: str, stat_name: str):
             return {"uuid": row['uuid'], "stat_value": row[stat_name]}
     raise HTTPException(status_code=404, detail=f"Account with that uuid not found or stat doesnt exist.")
 
-@router.get('/stats/{uuid}', tags=['stats'])
+@router.get('/stats/player/uuid/{uuid}', tags=['stats'])
 def get_all_player_stats(uuid: str):
     stats = check_update_csv()
 
@@ -57,12 +57,12 @@ def get_all_player_stats(uuid: str):
             return row
     raise HTTPException(status_code=404, detail=f"Account with that uuid not found")
 
-@router.get('/stats_name/{player_name}', tags=['stats'])
+@router.get('/stats/player/name/{player_name}', tags=['stats'])
 def get_all_player_stats_by_name(player_name: str):
     stats = check_update_csv()
     return common.get_all_player_stats_by_name(stats, player_name)
 
-@router.get('/stats/death_rate', tags=['stats'])
+@router.get('/stats/metrics/death_rate', tags=['stats'])
 def get_death_rate():
     scores = check_update_json()['scoreboard']['scores']
 
@@ -79,7 +79,7 @@ def get_death_rate():
 
     return deaths_rate_stats
 
-@router.get('/stats/total_hours', tags=['stats'])
+@router.get('/stats/metrics/total_hours', tags=['stats'])
 def get_total_hours():
     hours_played = check_update_json()['scoreboard']['scores']['Hours Played']
 
