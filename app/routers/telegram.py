@@ -17,7 +17,7 @@ API_URL = os.getenv("API_URL")
 IMAGE_URL = "https://api.noboobs.world/get_image"
 router = APIRouter()
 
-ALLOWED_CHARS = set("123467890-_")
+ALLOWED_CHARS = set("1234567890-_")
 @router.get("/get_image/{date}", tags=["telegram"])
 def get_image(date : str):
     date_str = str(date.replace(" ", "_").replace(":", "-"))
