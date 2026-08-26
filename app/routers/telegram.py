@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from fastapi.responses import FileResponse
 
-MSG_PATH = os.path.abspath(os.path.join(w, "../data/message.json"))
+MSG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/message.json"))
 IMG_FOLDER_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/images/"))
 IMG_FOLDER_REAL_PATH = os.path.realpath(IMG_FOLDER_PATH)
 ENV_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/private/.env"))
