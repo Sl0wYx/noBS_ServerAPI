@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 from pathlib import Path
 from fastapi.responses import FileResponse
 
-MSG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/message.json"))
+MSG_PATH = os.path.abspath(os.path.join(w, "../data/message.json"))
 IMG_FOLDER_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/images/"))
+IMG_FOLDER_REAL_PATH = os.path.realpath(IMG_FOLDER_PATH)
 ENV_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/private/.env"))
 load_dotenv(ENV_PATH)
 
@@ -16,13 +17,22 @@ API_URL = os.getenv("API_URL")
 IMAGE_URL = "https://api.noboobs.world/get_image"
 router = APIRouter()
 
+ALLOWED_CHARS = set("123467890-_")
 @router.get("/get_image/{date}", tags=["telegram"])
 def get_image(date : str):
     date_str = str(date.replace(" ", "_").replace(":", "-"))
     local_url = Path(os.path.join(IMG_FOLDER_PATH, f"{date_str}.png"))
 
+    if not set(date_str) <= ALLOWED_CHARS:
+        raise HTTPException(status_code=400, detail="Invalid characters!")
+
+    dir_name = os.path.dirname(os.path.realpath(local_url))
+    if dir_name != IMG_FOLDER_REAL_PATH:
+        raise HTTPException(status_code=400, detail="Invalid folder!")
+
     if not local_url.exists():
         raise HTTPException(status_code=404, detail="Image not found")
+
     return FileResponse(local_url)
 
 @router.get("/get_message", tags=["telegram"])
