@@ -1,7 +1,6 @@
 import os
 import json
 import csv
-from idlelib import __main__
 
 from fastapi import HTTPException
 
