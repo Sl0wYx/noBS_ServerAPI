@@ -1,5 +1,5 @@
+from anyio.streams import file
 from fastapi import APIRouter, Request, HTTPException
-from app.core import common
 import json
 import os
 from dotenv import load_dotenv
@@ -19,7 +19,7 @@ router = APIRouter()
 
 ALLOWED_CHARS = set("123467890-_")
 @router.get("/get_image/{date}", tags=["telegram"])
-def get_image(date : str):
+def get_image(date : str) -> FileResponse:
     date_str = str(date.replace(" ", "_").replace(":", "-"))
     local_url = Path(os.path.join(IMG_FOLDER_PATH, f"{date_str}.png"))
 
@@ -36,7 +36,7 @@ def get_image(date : str):
     return FileResponse(local_url)
 
 @router.get("/get_message", tags=["telegram"])
-def get_message():
+def get_message() -> dict[str, str] | None:
     try:
         with open(MSG_PATH, mode='r', encoding='utf-8-sig') as message:
             return json.load(message)
@@ -44,7 +44,7 @@ def get_message():
         raise HTTPException(status_code=500, detail="File message is unreachable")
 
 @router.post('/receive_message', tags=["telegram"])
-def receive_message(data: dict, request: Request):
+def receive_message(data: dict, request: Request) -> dict[str, str] | None:
     if request.headers.get("authorization") != API_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid API Token")
     else:

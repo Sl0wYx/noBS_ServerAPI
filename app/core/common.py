@@ -1,10 +1,11 @@
 import os
 import json
 import csv
+from idlelib import __main__
 
 from fastapi import HTTPException
 
-def file_last_change(path):
+def file_last_change(path) -> float | None:
     file = path.split("/")[-1]
     try:
         last_change = os.stat(path).st_mtime
@@ -50,8 +51,9 @@ def load_file(path, op):
 
 
 # Didn't want to make a separate utils.py file, so this is here
-def get_all_player_stats_by_name(stats, name):
+def get_all_player_stats_by_name(stats, name) -> dict[str, str] | None:
     for row in stats:
         if row['Player Name'] == name:
             return row
     raise HTTPException(status_code=404, detail=f"Stats with that player name not found")
+

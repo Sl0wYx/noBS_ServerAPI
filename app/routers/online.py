@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from app.core import common
-import json
+from app.core.cache import FileCache
 import os
 
 PATH_JSON = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/stats.json"))
@@ -9,41 +9,38 @@ router = APIRouter()
 
 csv_stats = common.load_file(PATH_CSV, "csv")
 csv_last_change = common.file_last_change(PATH_CSV)
-def load_online():
-    global csv_stats, csv_last_change
+csv_cache = FileCache(PATH_CSV, csv_stats, "csv", csv_last_change)
 
-    current_csv_change = common.file_last_change(PATH_CSV)
-    if csv_last_change != current_csv_change:
-        csv_stats = common.load_file(PATH_CSV, "csv")
-        csv_last_change = current_csv_change
+json_stats = common.load_file(PATH_JSON, "json")
+json_last_change = common.file_last_change(PATH_JSON)
+json_cache = FileCache(PATH_JSON, json_stats, "json", json_last_change)
 
-    try:
-        with open(PATH_JSON, 'r', encoding='utf-8') as online_file:
-            reader = json.load(online_file)
-            player_names = list(reader['online'].keys())
-            res = []
+def load_online() -> list[str]:
+    csv_cache.check()
+    json_cache.check()
 
-            for player_name in player_names:
-                try:
-                    player = common.get_all_player_stats_by_name(csv_stats, player_name)
-                    if player and ('uuid' in player):
-                        res.append(player['uuid'])
-                except Exception as e:
-                    continue
+    player_names = list(json_cache.data['online'].keys())
+    res = []
 
-            return res
-    except(FileNotFoundError, IOError):
-        raise HTTPException(status_code=500, detail="File is unreachable")
+    for player_name in player_names:
+        try:
+            player = common.get_all_player_stats_by_name(csv_cache.data, player_name)
+            if player and ('uuid' in player):
+                res.append(player['uuid'])
+        except Exception as e:
+            continue
+
+    return res
 
 online = load_online()
-last_change = common.file_last_change(PATH_JSON)
+online_last_change = common.file_last_change(PATH_JSON)
 @router.get('/online', tags=["online"])
-def get_online_players():
-    global last_change, online
+def get_online_players() -> list[str]:
+    global online_last_change, online
     current_change = common.file_last_change(PATH_JSON)
 
-    if current_change != last_change:
-        last_change = current_change
+    if current_change != online_last_change:
+        online_last_change = current_change
         online = load_online()
 
     return online
