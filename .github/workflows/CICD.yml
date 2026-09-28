@@ -74,8 +74,8 @@ jobs:
             git reset --hard origin/main
             git clean -fd -e app/data
 
-            # Remove test message after mounting
-            rm -f app/data/message.json
+            # Overwrite test message after mounting to empty message
+            echo '{"message": null, "date": null, "image": null}' > app/data/message.json
             
             docker pull ghcr.io/sl0wyx/nobs_serverapi:latest
             docker compose up -d && exit
