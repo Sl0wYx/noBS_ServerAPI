@@ -35,7 +35,7 @@ def get_image(date : str) -> FileResponse:
     return FileResponse(local_url)
 
 @router.get("/get_message", tags=["telegram"])
-def get_message() -> dict[str, str] | None:
+def get_message() -> dict[str, str | None]:
     try:
         with open(MSG_PATH, mode='r', encoding='utf-8-sig') as message:
             return json.load(message)
