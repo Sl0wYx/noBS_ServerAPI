@@ -55,12 +55,14 @@ def receive_message(data: dict, request: Request) -> dict[str, str] | dict[str, 
 
         date_str = str(data.get("date")).replace(" ", "_").replace(":", "-")
 
-        if isinstance(data("images"), int):
-            if data.get("images") == 1:
+        if data.get("images"):
+            images_count = data.get("images")
+
+            if images_count == 1:
                 image_dict = {"images": f"{IMAGE_URL}/{date_str}"}
-            elif 1 < data.get("images") <= 10:
+            elif 1 < images_count <= 10:
                 image_dict = {"images": []}
-                for i in range(data.get("images")):
+                for i in range(images_count):
                     image_dict["images"].append(f"{IMAGE_URL}/{date_str}_{i + 1}")
 
             data.update(image_dict)
