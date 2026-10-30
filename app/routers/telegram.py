@@ -54,13 +54,15 @@ def receive_message(data: dict, request: Request) -> dict[str, str] | dict[str, 
             raise HTTPException(status_code=404, detail=f"Path {base} not found")
 
         date_str = str(data.get("date")).replace(" ", "_").replace(":", "-")
-        if data.get("images") == 1:
-            image_dict = {"images" : f"{IMAGE_URL}/{date_str}"}
-            data.update(image_dict)
-        elif 1 < data.get("images") <= 10:
-            image_dict = {"images": []}
-            for i in range(data.get("images")):
-                image_dict["images"].append(f"{IMAGE_URL}/{date_str}_{i+1}")
+
+        if isinstance(data("images"), int):
+            if data.get("images") == 1:
+                image_dict = {"images": f"{IMAGE_URL}/{date_str}"}
+            elif 1 < data.get("images") <= 10:
+                image_dict = {"images": []}
+                for i in range(data.get("images")):
+                    image_dict["images"].append(f"{IMAGE_URL}/{date_str}_{i + 1}")
+
             data.update(image_dict)
 
         try:
