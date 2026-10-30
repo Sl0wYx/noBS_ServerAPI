@@ -35,7 +35,7 @@ def get_image(date : str) -> FileResponse:
     return FileResponse(local_url)
 
 @router.get("/get_message", tags=["telegram"])
-def get_message() -> dict[str, str | None]:
+def get_message() -> dict[str, str | list | None]:
     try:
         with open(MSG_PATH, mode='r', encoding='utf-8-sig') as message:
             return json.load(message)
@@ -43,7 +43,7 @@ def get_message() -> dict[str, str | None]:
         raise HTTPException(status_code=500, detail="File message is unreachable")
 
 @router.post('/receive_message', tags=["telegram"])
-def receive_message(data: dict, request: Request) -> dict[str, str] | None:
+def receive_message(data: dict, request: Request) -> dict[str, str] | dict[str, str, int] | None:
     if request.headers.get("authorization") != API_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid API Token")
     else:
@@ -54,8 +54,13 @@ def receive_message(data: dict, request: Request) -> dict[str, str] | None:
             raise HTTPException(status_code=404, detail=f"Path {base} not found")
 
         date_str = str(data.get("date")).replace(" ", "_").replace(":", "-")
-        if data.get("image"):
-            image_dict = {"image" : f"{IMAGE_URL}/{date_str}"}
+        if data.get("images") == 1:
+            image_dict = {"images" : f"{IMAGE_URL}/{date_str}"}
+            data.update(image_dict)
+        elif 1 < data.get("images") <= 10:
+            image_dict = {"images": []}
+            for i in range(data.get("images")):
+                image_dict["images"].append(f"{IMAGE_URL}/{date_str}_{i+1}")
             data.update(image_dict)
 
         try:
