@@ -63,7 +63,7 @@ def receive_message(data: dict, request: Request) -> dict[str, str] | dict[str, 
             elif 1 < images_count <= 10:
                 image_dict = {"images": []}
                 for i in range(images_count):
-                    image_dict["images"].append(f"{IMAGE_URL}/{date_str}_{i + 1}")
+                    image_dict["images"].append(f"{IMAGE_URL}/{date_str}_{i}")
 
             data.update(image_dict)
 
